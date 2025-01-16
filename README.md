@@ -59,7 +59,7 @@ value-calculator/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/value-calculator.git
+git clone https://github.com/ceteongvanness/value-calculator.git
 cd value-calculator
 ```
 
