@@ -1,200 +1,222 @@
 # Value Investing Calculator
 
-A production-ready React application for value investing analysis, featuring Benjamin Graham's investment principles, modern DCF analysis, and NCAV calculations. Built with TypeScript and deployed on AWS EKS using Docker and Kubernetes.
-
-## Overview
-
-This calculator helps investors analyze stocks using three major valuation methods:
-- Graham's Formula (√(22.5 × EPS × Book Value))
-- Discounted Cash Flow (DCF) Analysis
-- Net Current Asset Value (NCAV)
-
-## Repository Structure
-```
-value-calculator/
-├── src/
-│   └── components/
-│       └── ValueInvestingCalculator.tsx    # Main calculator component
-├── k8s/
-│   ├── deployment.yaml                     # Kubernetes deployment config
-│   ├── service.yaml                        # Kubernetes service config
-│   ├── hpa.yaml                           # Horizontal Pod Autoscaler
-│   └── network-policy.yaml                # Network security policies
-├── .github/
-│   └── workflows/
-│       └── deploy.yml                      # GitHub Actions pipeline
-├── Dockerfile                             # Docker configuration
-├── nginx.conf                             # Nginx configuration
-└── README.md                              # This file
-```
-
-## Quick Start
-
-### Local Development
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-```
-
-### Docker Development
-```bash
-# Build image
-docker build -t value-calculator .
-
-# Run container
-docker run -p 80:80 value-calculator
-```
+A modern React application for value investing analysis, implementing Benjamin Graham's investment principles with TypeScript and Tailwind CSS.
 
 ## Features
 
-### Valuation Methods
-1. **Graham's Formula**
-   - Conservative valuation estimate
-   - Based on earnings and book value
-   - Suitable for stable companies
-
-2. **DCF Analysis**
-   - Projects future cash flows
-   - Adjustable growth rates
-   - Customizable discount rates
-
-3. **NCAV Calculation**
-   - Ultra-conservative approach
-   - Focus on liquid assets
-   - Strong margin of safety
-
-### Technical Features
-- TypeScript for type safety
-- React for UI components
+- Graham's Formula Calculation (√(22.5 × EPS × Book Value))
+- Discounted Cash Flow (DCF) Analysis
+- Net Current Asset Value (NCAV) Calculation
 - Real-time calculations
 - Responsive design
-- Input validation
-- Error handling
+- TypeScript type safety
 
-## Deployment
+## Prerequisites
 
-### Prerequisites
-- AWS CLI configured
-- kubectl installed
-- Docker installed
 - Node.js ≥ 18
+- npm ≥ 8
 
-### AWS EKS Setup
-```bash
-# Create EKS cluster
-eksctl create cluster \
-  --name value-calculator-cluster \
-  --region us-west-2 \
-  --nodes 3
+## Tech Stack
 
-# Configure kubectl
-aws eks update-kubeconfig --name value-calculator-cluster
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui components
+
+## Project Structure
+
+```
+value-calculator/
+├── src/
+│   ├── components/
+│   │   ├── ValueInvestingCalculator.tsx    # Main calculator component
+│   │   └── ui/
+│   │       └── card.tsx                    # Card UI component
+│   ├── lib/
+│   │   └── utils.ts                        # Utility functions
+│   ├── main.tsx                            # Application entry point
+│   └── index.css                           # Global styles
+├── public/
+├── k8s/                                    # Kubernetes configurations
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── hpa.yaml
+│   └── network-policy.yaml
+├── .github/
+│   └── workflows/
+│       └── deploy.yml                      # GitHub Actions pipeline
+├── index.html
+├── postcss.config.js
+├── tailwind.config.js
+├── tsconfig.json
+├── vite.config.ts
+├── Dockerfile
+└── README.md
 ```
 
-### Deploy Application
+## Installation & Setup
+
+1. Clone the repository:
 ```bash
-# Deploy to Kubernetes
+git clone https://github.com/yourusername/value-calculator.git
+cd value-calculator
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start development server:
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+## Docker Support
+
+Build the Docker image:
+```bash
+docker build -t value-calculator .
+```
+
+Run the container:
+```bash
+docker run -p 80:80 value-calculator
+```
+
+## Kubernetes Deployment
+
+1. Configure kubectl:
+```bash
+aws eks update-kubeconfig --name value-calculator-cluster --region us-west-2
+```
+
+2. Deploy to Kubernetes:
+```bash
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
+```
 
-# Verify deployment
+3. Verify deployment:
+```bash
 kubectl get pods -n value-calculator
 ```
 
-## Infrastructure Costs
+## Investment Calculations
 
-### AWS Resources (Monthly Estimate)
-- EKS Cluster: $73
-- 3 x t3.medium nodes: ~$99
-- Load Balancer: ~$16.20
-- ECR Storage: $0.10/GB
-- Data Transfer: $0.09/GB (after 1GB)
+### Graham's Formula
+- Uses √(22.5 × EPS × Book Value)
+- Provides conservative valuation estimate
+- Best for stable, dividend-paying companies
 
-### Cost Optimization
-- Use Spot Instances where possible
-- Implement auto-scaling
-- Regular monitoring of resource usage
+### DCF Analysis
+- Projects future cash flows
+- Uses customizable growth rate
+- Incorporates terminal value
 
-## Security
+### NCAV Calculation
+- Ultra-conservative approach
+- Focus on liquid assets
+- Strong margin of safety
 
-### Network Security
-- Private VPC configuration
-- Network policies for pod isolation
-- Security groups for access control
+## Usage Examples
 
-### Access Control
-- RBAC implementation
-- Pod security policies
-- Service account configuration
+1. Basic Stock Valuation:
+```typescript
+const metrics = {
+  eps: 3.5,
+  bookValue: 25,
+  freeCashFlow: 1000000,
+  growthRate: 10,
+  requiredReturn: 15,
+  shares: 1000000
+};
 
-## Monitoring
-
-### Kubernetes Resources
-```bash
-# Check deployment status
-kubectl get deployments -n value-calculator
-
-# View pod logs
-kubectl logs -f deployment/value-calculator -n value-calculator
+const calculator = new ValueCalculator();
+const value = calculator.calculateAllValues(metrics);
 ```
 
-### AWS CloudWatch
-- CPU utilization monitoring
-- Memory usage tracking
-- Custom metrics available
+2. Portfolio Analysis:
+```typescript
+const portfolio = [
+  { symbol: "AAPL", metrics: {...} },
+  { symbol: "MSFT", metrics: {...} }
+];
 
-## Backup & Recovery
-
-### Backup Procedures
-```bash
-# Create backup
-velero backup create value-calculator-backup \
-  --include-namespaces value-calculator
-
-# Schedule regular backups
-kubectl apply -f k8s/backup-schedule.yaml
+portfolio.forEach(stock => {
+  const value = calculator.calculateAllValues(stock.metrics);
+  console.log(`${stock.symbol}: ${value.grahamValue}`);
+});
 ```
 
-### Recovery
-```bash
-# Restore from backup
-velero restore create \
-  --from-backup value-calculator-backup
-```
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Best Practices
+
+1. Input Data Verification
+- Use latest financial statements
+- Verify data accuracy
+- Consider industry averages
+
+2. Valuation Interpretation
+- Use multiple valuation methods
+- Apply margin of safety
+- Consider qualitative factors
+
+3. Code Quality
+- Write tests for calculations
+- Maintain type safety
+- Follow ESLint rules
 
 ## Troubleshooting
 
-### Common Issues
-1. Pod Startup Failures
-   ```bash
-   kubectl describe pod <pod-name> -n value-calculator
-   ```
+Common issues and solutions:
 
-2. Service Connection Issues
-   ```bash
-   kubectl get svc value-calculator-service -n value-calculator
-   ```
+1. TypeScript Errors:
+```bash
+# Regenerate TypeScript configuration
+npx tsc --init
+```
 
-3. Deployment Issues
-   ```bash
-   kubectl rollout status deployment/value-calculator
-   ```
+2. Missing Dependencies:
+```bash
+# Reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
+```
 
-## Contributing
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Push to the branch
-5. Create a Pull Request
-
-## Support
-For issues and feature requests, please create an issue in the GitHub repository.
+3. Build Errors:
+```bash
+# Clear build cache
+npm run build -- --force
+```
 
 ## License
-MIT License - free to use and modify.
+
+MIT License - see [LICENSE.md](LICENSE.md)
+
+## Acknowledgments
+
+- Based on Benjamin Graham's value investing principles
+- Inspired by modern portfolio theory
+- Uses industry-standard financial calculations
+
+## Support
+
+For issues and feature requests, please create an issue in the GitHub repository.
